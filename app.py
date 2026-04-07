@@ -34,8 +34,7 @@ def insert_safe():
 @app.route("/count-tesla-primary", methods=["GET"])
 def count_tesla_primary():
     primary_collection = collection.with_options(read_preference=ReadPreference.PRIMARY)
-    count = primary_collection.count_documents({"Make": "Tesla"})
-
+    count = primary_collection.count_documents({"Make": {"$regex": r"^\s*Tesla\s*$", "$options": "i"}}) # need to account for variations :(
     return jsonify({"count": count})
 
 @app.route("/count-bmw-secondary", methods=["GET"])
